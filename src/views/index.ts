@@ -1,0 +1,21 @@
+// Export all views
+export { default as LoginView } from './LoginView';
+export { default as ForgotPasswordView } from './ForgotPasswordView';
+export { default as RegisterView } from './RegisterView';
+export { default as DashboardView } from './DashboardView';
+export { default as ProfileView } from './ProfileView';
+export { default as TradeBuyView } from './TradeBuyView';
+export { default as TradeSellView } from './TradeSellView';
+export { default as TransactionHistoryView } from './TransactionHistoryView';
+export { default as NotificationsView } from './NotificationsView';
+export { default as PointsMallView } from './PointsMallView';
+export { default as MyWalletView } from './MyWalletView';
+export { default as WithdrawView } from './WithdrawView';
+export { default as SystemAnnouncementsView } from './SystemAnnouncementsView';
+export { default as PaymentAccountView } from './PaymentAccountView';
+export { default as CustomerServiceView } from './CustomerServiceView';
+export { default as ReferralView } from './ReferralView';
+export { default as MembershipView } from './MembershipView';
+export { default as SecurityCenterView } from './SecurityCenterView';
+export { default as ChangePasswordView } from './ChangePasswordView';
+export { default as ChangePinView } from './ChangePinView';
