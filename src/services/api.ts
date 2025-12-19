@@ -41,8 +41,8 @@ api.interceptors.response.use(
 // 登录API接口
 export const authApi = {
   // 登录
-  login: async (credentials: { account: string; password: string; captcha?: string }) => {
-    return api.post('/auth/login', credentials);
+  login: async (credentials: { account: string; password: string; captcha?: string,captchaId?:string }) => {
+    return api.post('/auth.php', credentials);
   },
 
   // 注册
@@ -62,7 +62,7 @@ export const authApi = {
 
   // 获取验证码
   getCaptcha: async () => {
-    return api.get('/auth/captcha');
+    return api.get('/captcha.php');
   },
 
   // 验证验证码

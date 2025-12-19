@@ -10,6 +10,7 @@ const LoginView: React.FC<ViewProps> = ({ navigate, t, lang, setLang }) => {
   const [password, setPassword] = useState('');
   const [captcha, setCaptcha] = useState('');
   const [captchaImage, setCaptchaImage] = useState('');
+  const [captchaId, setCaptchaId] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -19,11 +20,13 @@ const LoginView: React.FC<ViewProps> = ({ navigate, t, lang, setLang }) => {
       // 这里假设API返回base64格式的图片
       const response = await authApi.getCaptcha();
       if (response.data?.captchaImage) {
+        setCaptchaId(response.data?.id);
         setCaptchaImage(response.data?.captchaImage);
       }
     } catch (err) {
       console.error('获取验证码失败:', err);
       // 模拟一个验证码（实际开发中应从API获取）
+       setCaptchaId(0);
       setCaptchaImage('data:image/svg+xml;base64,' + btoa(`
         <svg width="120" height="40" xmlns="http://www.w3.org/2000/svg">
           <rect width="120" height="40" fill="#1e293b"/>
@@ -70,6 +73,7 @@ const LoginView: React.FC<ViewProps> = ({ navigate, t, lang, setLang }) => {
         account: account.trim(),
         password: password.trim(),
         captcha: captcha.trim(),
+        captchaId:captchaId
       });
 
       // 处理登录成功
