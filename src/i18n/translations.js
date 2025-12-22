@@ -117,7 +117,11 @@ export const TRANSLATIONS = {
         wallet: "我的錢包",
         settings: "個人設定",
         announce: "系統公告"
-      }
+      },
+      sort: {
+        amount: '按金额排序',
+        time: '按时间排序'
+      },
     },
     trade: {
       buyTitle: "購買點數",
