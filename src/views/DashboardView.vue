@@ -325,7 +325,7 @@ const processedList = computed(() => {
 
 // Methods
 function canAfford(item) {
-  return item.type === 'buy' ? dashboardData.value.assetBalance >= item.amount : true
+  return item.type === 'buy' ? dashboardData.value.points.available >= item.amount : true
 }
 
 function getBadgeText(bonus) {
@@ -442,12 +442,16 @@ async function handleBuy(item) {
     console.error('Buy error:', err)
     showToast({
       type: 'error',
-      title: t.dashboard.buyFailed,
-      message: err.message || t.common.networkError
+      title: 'error',
+      message:  err?.response?.data?.message
     })
   } finally {
     buyLoading.value = false
     selectedItemId.value = null
+    router.push({
+        name: 'trade-buy',
+        params: { item: JSON.stringify(item) }
+      })
   }
 }
 
