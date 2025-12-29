@@ -2,17 +2,29 @@ import React, { useState } from 'react';
 import { ArrowLeft, Key } from 'lucide-react';
 import { ViewProps } from '../types';
 import { InputField, NeonButton } from '../components';
+import api from '../services/api';
 
 const ChangePinView: React.FC<ViewProps> = ({ navigate, t }) => {
   const [oldPin, setOldPin] = useState('');
   const [newPin, setNewPin] = useState('');
   const [confirmPin, setConfirmPin] = useState('');
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!oldPin || !newPin || !confirmPin) return;
     if (newPin !== confirmPin) return alert(t.security.errorMismatch);
-    alert(t.security.successMsg);
-    navigate('security-center');
+    try {
+      const res = await api.post("/user/reset-transaction-password",{
+        oldPin: oldPin,
+        newPin: newPin,
+        confirmPin: confirmPin
+      }); 
+      if (res.data) {
+        alert(t.security.successMsg);
+        navigate('security-center');
+      }
+    } catch (err: any) {
+      alert(err.response?.data?.message);
+    }
   };
 
   return (

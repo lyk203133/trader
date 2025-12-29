@@ -208,7 +208,7 @@ export const TRANSLATIONS = {
       oldPin: "舊交易密碼",
       newPin: "新交易密碼",
       confirmPin: "確認新交易密碼",
-      passHint: "請設定 8-16 位英數組合",
+      passHint: "請設定 6-16 位英數組合",
       pinHint: "請設定 6 位純數字驗證碼",
       successMsg: "設定已成功更新",
       errorMismatch: "兩次輸入的不一致"
@@ -494,7 +494,7 @@ export const TRANSLATIONS = {
       oldPin: "Old Transaction PIN",
       newPin: "New Transaction PIN",
       confirmPin: "Confirm New PIN",
-      passHint: "Use 8-16 alphanumeric characters",
+      passHint: "Use 6-16 alphanumeric characters",
       pinHint: "Enter a 6-digit numeric PIN",
       successMsg: "Settings updated successfully",
       errorMismatch: "Passwords do not match"
@@ -780,7 +780,7 @@ export const TRANSLATIONS = {
       oldPin: "Mã PIN giao dịch cũ",
       newPin: "Mã PIN giao dịch mới",
       confirmPin: "Xác nhận mã PIN mới",
-      passHint: "Sử dụng 8-16 ký tự chữ và số",
+      passHint: "Sử dụng 6-16 ký tự chữ và số",
       pinHint: "Nhập mã PIN gồm 6 chữ số",
       successMsg: "Cập nhật cài đặt thành công",
       errorMismatch: "Mật khẩu không khớp"

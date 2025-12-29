@@ -2,17 +2,29 @@ import React, { useState } from 'react';
 import { ArrowLeft, Lock } from 'lucide-react';
 import { ViewProps } from '../types';
 import { InputField, NeonButton } from '../components';
+import api from '../services/api';
 
 const ChangePasswordView: React.FC<ViewProps> = ({ navigate, t }) => {
   const [oldPass, setOldPass] = useState('');
   const [newPass, setNewPass] = useState('');
   const [confirmPass, setConfirmPass] = useState('');
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!oldPass || !newPass || !confirmPass) return;
     if (newPass !== confirmPass) return alert(t.security.errorMismatch);
-    alert(t.security.successMsg);
-    navigate('security-center');
+    try {
+      const res = await api.post("/user/reset-password",{
+        oldPass: oldPass,
+        newPass: newPass,
+        confirmPass: confirmPass
+      }); 
+      if (res.data) {
+        alert(t.security.successMsg);
+        navigate('security-center');
+      }
+    } catch (err: any) {
+      alert(err.response?.data?.message);
+    }
   };
 
   return (
