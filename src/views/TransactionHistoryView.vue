@@ -158,9 +158,9 @@
           <div class="flex justify-between items-start mb-3">
             <div>
               <div class="flex items-center gap-2">
-                <span class="text-xs font-mono text-emerald-400">{{ tx.transaction_id || tx.id }}</span>
+                <span class="text-xs font-mono text-emerald-400">{{ tx.order_no || tx.id }}</span>
                 <span class="text-xs text-slate-500 px-2 py-0.5 bg-slate-900/50 rounded">
-                  {{ tx.target || 'N/A' }}
+                  {{ tx.target_type || 'N/A' }}
                 </span>
               </div>
               <p class="text-xs text-slate-500 mt-1">{{ formatDate(tx.created_at) }}</p>
@@ -179,7 +179,7 @@
             </div>
             <div>
               <span class="text-slate-500">{{ t.common.amount }}:</span>
-              <span class="ml-2 font-mono font-bold text-white">{{ (tx.amount || 0).toLocaleString() }}</span>
+              <span class="ml-2 font-mono font-bold text-white">{{ (tx.amount_points || 0).toLocaleString() }}</span>
             </div>
             <div v-if="tx.fee">
               <span class="text-slate-500">{{ t.history.fee }}:</span>
@@ -387,7 +387,7 @@ async function fetchTransactions(reset = true) {
       // Check if has more data
       const total = data.stats?.totalCount || 0
       const loaded = transactions.value.length
-      hasMore.value = loaded < total
+      hasMore.value =  data.pagination.has_more;// loaded < total
       
       // Update stats
       if (reset) {
@@ -532,17 +532,17 @@ function formatDateTime(dateString) {
 
 function getStatusColor(status) {
   const colors = {
-    success: 'bg-emerald-900/50 text-emerald-400 border border-emerald-500/30',
-    pending: 'bg-yellow-900/50 text-yellow-400 border border-yellow-500/30',
-    processing: 'bg-blue-900/50 text-blue-400 border border-blue-500/30',
-    cancelled: 'bg-slate-700 text-slate-400 border border-slate-500/30',
-    abnormal: 'bg-rose-900/50 text-rose-400 border border-rose-500/30'
+    0: 'bg-emerald-900/50 text-emerald-400 border border-emerald-500/30',
+    1: 'bg-yellow-900/50 text-yellow-400 border border-yellow-500/30',
+    2: 'bg-blue-900/50 text-blue-400 border border-blue-500/30',
+    3: 'bg-slate-700 text-slate-400 border border-slate-500/30',
+    4: 'bg-rose-900/50 text-rose-400 border border-rose-500/30'
   }
   return colors[status] || colors.success
 }
 
 function getStatusText(status) {
-  return t.value.history.statuses[status] || status
+  return t.value.mall.status[status] || status
 }
 
 function getTypeColor(type) {

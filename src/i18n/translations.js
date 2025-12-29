@@ -9,6 +9,7 @@ export const TRANSLATIONS = {
       submit: "提交",
       copy: "複製",
       loading: "載入中...",
+      loadMore:"加載更多",
       success: "成功",
       points: "點數",
       currency: "TWD",
@@ -223,7 +224,8 @@ export const TRANSLATIONS = {
       types: { all: "全部類型", buy: "買進", sell: "賣出" },
       targets: { all: "全部對象", platform: "平台", merchant: "商戶", member: "會員" },
       statuses: { all: "全部狀態", success: "交易成功", pending: "交易中", cancelled: "已取消", abnormal: "異常" },
-      stats: { count: "篩選後總筆數", points: "總交易點數", fees: "總手續費", bonus: "總紅利" }
+      stats: { count: "篩選後總筆數", points: "總交易點數", fees: "總手續費", bonus: "總紅利" },
+      fee:"手續費"
     },
     notification: {
       title: "通知中心",
