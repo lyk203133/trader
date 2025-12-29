@@ -110,14 +110,14 @@
         <div class="bg-slate-800 rounded-xl p-4 border border-slate-700 mb-6">
           <div class="flex justify-between items-center mb-2 border-b border-slate-700 pb-2">
             <span class="text-xs text-slate-400">{{ t.mall.orderId }}</span>
-            <span class="text-xs font-mono text-white">{{ orderData.orderId }}</span>
+            <span class="text-xs font-mono text-white">{{ orderData.order_no }}</span>
           </div>
           <div class="flex justify-between items-center mb-2">
             <span class="text-xs text-slate-400">{{ t.mall.createTime }}</span>
-            <span class="text-xs font-bold text-slate-300">{{ formatTime(orderData.createTime) }}</span>
+            <span class="text-xs font-bold text-slate-300">{{ formatTime(orderData.created_at) }}</span>
           </div>
           <div class="flex justify-between items-center mb-2">
-            <span class="text-xs text-slate-400">{{ t.mall.status }}</span>
+            <span class="text-xs text-slate-400">{{ t.mall.statusName }}</span>
             <span :class="`text-xs font-bold ${getStatusClass(orderData.status)}`">
               {{ getStatusText(orderData.status) }}
             </span>
@@ -142,13 +142,15 @@
           <div class="w-48 h-48 bg-white p-2 rounded-lg mb-4">
             <div v-if="orderData.qrCode" class="w-full h-full flex items-center justify-center">
               <img 
-                :src="orderData.qrCode" 
+                :src="'data:image/png;base64,'+orderData.qrCode" 
                 alt="Payment QR Code" 
                 class="w-full h-full object-contain"
               />
             </div>
             <div v-else class="w-full h-full bg-slate-900 flex items-center justify-center relative overflow-hidden">
-              <div class="animate-pulse w-full h-full bg-slate-800"></div>
+              <div class="animate-pulse w-full h-full bg-slate-800">
+
+              </div>
             </div>
           </div>
           
@@ -167,7 +169,7 @@
             </div>
             <div class="flex justify-between text-sm">
               <span class="text-slate-400">{{ t.trade.amount }}</span>
-              <span class="text-emerald-400 font-mono font-bold">$ {{ orderData.amount?.toLocaleString() }}</span>
+              <span class="text-emerald-400 font-mono font-bold">$ {{ orderData.amount_points?.toLocaleString() }}</span>
             </div>
             
             <!-- Payment Reference -->
@@ -372,11 +374,11 @@ async function handleApply() {
       startTimer()
       startOrderCheck()
       
-      showToast({
+      /*showToast({
         type: 'success',
         title: t.value.mall.orderCreated,
         message: t.value.mall.scanQRToPay
-      })
+      })*/
     } else {
       showToast({
         type: 'error',
@@ -482,9 +484,9 @@ async function handleFileUpload(event) {
   try {
     const formData = new FormData()
     formData.append('receipt', file)
-    formData.append('orderId', orderData.value.orderId)
+    formData.append('orderId', orderData.value.id)
     
-    const response = await api.post('/mall/upload-receipt', formData, {
+    const response = await api.post('/trading/upload-receipt', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
@@ -530,16 +532,16 @@ async function confirmPayment() {
   submitting.value = true
   
   try {
-    const response = await post('/mall/confirm-payment', {
-      orderId: orderData.value.orderId,
+    const response = await post('/trading/confirm-payment', {
+      orderId: orderData.value.id,
       receiptUrl: receiptUrl.value
     })
     
     if (response.data.success) {
       showToast({
         type: 'success',
-        title: t.trade.paymentConfirmed,
-        message: t.trade.waitingVerification
+        title: t.value.trade.paymentConfirmed,
+        message: t.value.trade.waitingVerification
       })
       
       // Wait a moment then check status
@@ -557,7 +559,7 @@ async function confirmPayment() {
     console.error('Confirm payment error:', error)
     showToast({
       type: 'error',
-      title: t.trade.confirmFailed,
+      title: t.value.trade.confirmFailed,
       message: error.response?.data?.message || error.message || t.common.networkError
     })
   } finally {
@@ -631,24 +633,18 @@ function formatTimeLeft(seconds) {
 
 function getStatusClass(status) {
   switch (status) {
-    case 'pending': return 'text-yellow-500'
-    case 'processing': return 'text-blue-500'
-    case 'completed': return 'text-emerald-500'
-    case 'expired': return 'text-rose-500'
-    case 'cancelled': return 'text-slate-500'
+    case '0': return 'text-yellow-500'
+    case '1': return 'text-blue-500'
+    case '2': return 'text-emerald-500'
+    case '4': return 'text-rose-500'
+    case '3': return 'text-slate-500'
     default: return 'text-slate-400'
   }
 }
 
 function getStatusText(status) {
-  const statusMap = {
-    'pending': t.value.mall.status.pending,
-    'processing': t.value.mall.status.processing,
-    'completed': t.value.mall.status.completed,
-    'expired': t.value.mall.status.expired,
-    'cancelled': t.value.mall.status.cancelled
-  }
-  return statusMap[status] || status
+  return t.value.mall.status[status]
+  
 }
 
 // Lifecycle

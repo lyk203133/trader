@@ -184,7 +184,7 @@ export const TRANSLATIONS = {
       genQR: '生成付款二维码',
       orderId: '订单编号',
       createTime: '创建时间',
-      status: '订单状态',
+      statusName: '订单状态',
       orderCreated: '订单创建成功',
       orderFailed: '订单创建失败',
       scanQRToPay: '请扫描二维码完成支付',
@@ -207,11 +207,11 @@ export const TRANSLATIONS = {
       },
       
       status: {
-        pending: '等待支付',
-        processing: '处理中',
-        completed: '已完成',
-        expired: '已过期',
-        cancelled: '已取消'
+        0: '等待支付',
+        1: '处理中',
+        2: '已完成',
+        4: '已过期',
+        3: '已取消'
       }
     },
     history: {
