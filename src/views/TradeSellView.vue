@@ -23,8 +23,8 @@
 <script setup>
 import { ArrowLeft } from 'lucide-vue-next'
 import NeonButton from '@/components/NeonButton.vue'
-import { useTranslation } from '@/composables/useTranslation'
-
+import { useTranslation } from '@/composables/useTranslation' 
+ 
 const { t } = useTranslation()
 </script>
 
