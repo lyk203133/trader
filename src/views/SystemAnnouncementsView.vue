@@ -7,9 +7,9 @@
         </button>
         <h2 class="text-white font-bold text-lg">{{ t.announce.title }}</h2>
       </div>
-      <button @click="markAllRead" class="p-2 text-slate-400 hover:text-emerald-400 hover:bg-slate-700 rounded-full">
+      <!--button @click="markAllRead" class="p-2 text-slate-400 hover:text-emerald-400 hover:bg-slate-700 rounded-full">
         <CheckCheck :size="20" />
-      </button>
+      </button-->
     </div>
     <div class="flex-1 overflow-y-auto px-4 py-4 space-y-3 no-scrollbar">
       <div 
@@ -47,15 +47,16 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { ArrowLeft, CheckCheck, Clock, Info, Check } from 'lucide-vue-next'
 import { useTranslation } from '@/composables/useTranslation'
+import { get } from '@/utils/api'
 
 const { t, lang } = useTranslation()
 
 const expandedId = ref(null)
 const announcements = ref([
-  { 
+  /*{ 
     id: 1, 
     title: { zh: '系統維護公告', en: 'System Maintenance', vi: 'Thông báo bảo trì' }, 
     time: '2023-11-28', 
@@ -68,7 +69,7 @@ const announcements = ref([
     time: '2023-11-25', 
     content: { zh: '近期詐騙猖獗，請勿相信任何非官方管道的投資訊息。本平台不會要求用戶私下轉帳或提供密碼，請提高警覺。', en: 'Please be aware of phishing scams. Do not trust unofficial channels.', vi: 'Gần đây có nhiều lừa đảo, vui lòng không tin vào các kênh không chính thức.' }, 
     isRead: false 
-  }
+  }*/
 ])
 
 function markAllRead() {
@@ -96,5 +97,21 @@ function getContent(item) {
   if (lang.value === 'vi-VN') return item.content.vi
   return item.content.en
 }
+
+async function fetchAnnouncements () {
+  try {
+    const response = await get('/announcement/getAnnouncements')
+    console.log(response)
+    if (response.data.success) {
+      announcements.value= response.data.data
+    }
+  } catch (err) {
+    console.error('error:', err)
+  }
+}
+
+onMounted(() => {
+  fetchAnnouncements ()
+})
 </script>
 
