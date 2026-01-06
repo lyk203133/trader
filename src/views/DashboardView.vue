@@ -427,10 +427,7 @@ async function handleBuy(item) {
       fetchTradingList()
       
       // 跳转到交易页面
-      router.push({
-        name: 'trade-buy',
-        params: { item: JSON.stringify(item) }
-      })
+      router.push('/trade-buy?id='+item.id)
     } else {
       showToast({
         type: 'error',
@@ -448,10 +445,10 @@ async function handleBuy(item) {
   } finally {
     buyLoading.value = false
     selectedItemId.value = null
-    router.push({
-        name: 'trade-buy',
+    /*router.push({
+        name: 'trade-buy/'+item.id,
         params: { item: JSON.stringify(item) }
-      })
+      })*/
   }
 }
 
