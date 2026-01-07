@@ -233,6 +233,78 @@
           </div>
         </div>
       </template>
+
+      <!-- Password Modal for Selling -->
+      <div v-if="showPasswordModal" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+        <div class="bg-slate-800 rounded-2xl p-6 w-full max-w-md mx-auto border border-slate-700">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-lg font-bold text-white">{{ t.dashboard.confirmSell }}</h3>
+            <button @click="closePasswordModal" class="text-slate-400 hover:text-white">
+              <X :size="20" />
+            </button>
+          </div>
+          
+          <!-- Selected Item Info -->
+          <div v-if="selectedItemForSell" class="mb-6 p-4 bg-slate-900/50 rounded-lg">
+           
+            
+            <div class="grid grid-cols-2 gap-3 text-sm">
+              <div>
+                <span class="text-slate-500">{{ t.common.amount }}:</span>
+                <span class="ml-2 font-mono font-bold text-emerald-400">
+                  {{ (selectedItemForSell.amount_points || 0).toLocaleString() }}
+                </span>
+              </div>
+              
+            </div>
+          </div>
+          
+          <!-- Password Input -->
+          <div class="mb-6">
+            <label class="block text-slate-300 text-sm font-bold mb-2">
+              {{ t.dashboard.enterPassword }}
+            </label>
+            <div class="relative">
+              <input
+                v-model="password"
+                type="password"
+                placeholder="請輸入交易密碼"
+                class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white pr-10"
+                :disabled="passwordLoading"
+                @keyup.enter="confirmSellWithPassword"
+              />
+              <div class="absolute right-3 top-3">
+                <Lock :size="18" class="text-slate-500" />
+              </div>
+            </div>
+            <p class="text-xs text-slate-500 mt-2">
+              {{ t.dashboard.passwordHint }}
+            </p>
+          </div>
+          
+          <!-- Action Buttons -->
+          <div class="flex gap-3">
+            <button
+              @click="closePasswordModal"
+              class="flex-1 py-3 bg-slate-700 text-slate-300 hover:text-white rounded-lg"
+              :disabled="passwordLoading"
+            >
+              {{ t.common.cancel }}
+            </button>
+            <button
+              @click="confirmSellWithPassword"
+              :disabled="!password.trim() || passwordLoading"
+              class="flex-1 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <span v-if="passwordLoading" class="flex items-center justify-center">
+                <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                {{ t.common.processing }}
+              </span>
+              <span v-else>{{ t.common.confirm }}</span>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -453,6 +525,93 @@ async function handleBuy(item) {
 }
 
 async function handleSell(item) {
+  if (sellLoading.value || !canAfford(item)) return
+  
+  // 顯示密碼輸入彈窗
+  showPasswordModalPanel(item)
+}
+
+// 新增密碼驗證相關狀態和方法
+const showPasswordModal = ref(false)
+const password = ref('')
+const passwordLoading = ref(false)
+const selectedItemForSell = ref(null)
+
+function showPasswordModalPanel(item) {
+  selectedItemForSell.value = item
+  password.value = ''
+  showPasswordModal.value = true
+}
+
+function closePasswordModal() {
+  showPasswordModal.value = false
+  password.value = ''
+  selectedItemForSell.value = null
+  passwordLoading.value = false
+}
+
+async function confirmSellWithPassword() {
+  if (!password.value.trim() || password.value != '123456') {
+    showToast({
+      type: 'error',
+      title: '交易提示',
+      message: '交易密碼錯誤'
+    })
+    return
+  }
+  
+  passwordLoading.value = true
+  
+  try {
+    const item = selectedItemForSell.value
+    
+    // 可以先發送一個密碼驗證請求，或者直接發送交易請求
+    const response = await post('/trading/sell', {
+      itemId: item.id,
+      amount: item.amount_points,
+      password: password.value // 添加密碼字段
+    })
+    
+    if (response.data.success) {
+      showToast({
+        type: 'success',
+        title: t.value.dashboard.sellSuccess,
+        message: t.value.dashboard.sellSuccessMessage
+      })
+      
+      // 刷新数据
+      fetchDashboardData()
+      fetchTradingList()
+      
+      // 關閉密碼彈窗
+      closePasswordModal()
+      
+      // 跳转到交易页面
+      router.push({
+        name: 'trade-sell',
+        params: { item: JSON.stringify(item) }
+      })
+    } else {
+      showToast({
+        type: 'error',
+        title: t.value.dashboard.sellFailed,
+        message: response.data.message || t.value.common.requestFailed
+      })
+    }
+  } catch (err) {
+    console.error('Sell error:', err)
+    showToast({
+      type: 'error',
+      title: t.value.dashboard.sellFailed,
+      message: err.response?.data?.message || err.message || t.value.common.networkError
+    })
+  } finally {
+    passwordLoading.value = false
+  }
+}
+
+
+async function handleSellX(item) {
   if (sellLoading.value || !canAfford(item)) return
   
   selectedItemId.value = item.id
