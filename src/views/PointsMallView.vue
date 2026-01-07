@@ -25,7 +25,7 @@
             <div>
               <p class="text-sm text-slate-400 mb-1">{{ t.mall.currentBalance }}</p>
               <p class="text-2xl font-mono font-bold text-emerald-400">
-                {{ userBalance?.toLocaleString() || '0' }} P
+                {{ userBalance?.toLocaleString() || '0' }} VND
               </p>
             </div>
             <div class="text-right">
@@ -79,10 +79,10 @@
         <div class="space-y-3 bg-slate-800/50 rounded-xl border border-slate-700/50 p-4">
           <div class="flex justify-between items-center">
             <span class="text-sm text-slate-400">{{ t.mall.rechargeAmount }}</span>
-            <span class="text-xl font-mono font-bold text-white">{{ amount || 0 }} P</span>
+            <span class="text-xl font-mono font-bold text-white">{{ amount || 0 }} </span>
           </div>
           <div class="flex justify-between items-center">
-            <span class="text-sm text-slate-400">{{ t.mall.estPay }} (TWD)</span>
+            <span class="text-sm text-slate-400">{{ t.mall.estPay }} (VND)</span>
             <span class="text-xl font-mono font-bold text-emerald-400">$ {{ calculatedAmount.toLocaleString() }}</span>
           </div>
           <div class="pt-3 border-t border-slate-700/50">

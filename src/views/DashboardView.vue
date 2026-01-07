@@ -171,7 +171,7 @@
               </div>
               <div class="flex items-center">
                 <span class="text-xl font-mono font-bold text-white tracking-tighter">{{ item.amount_points?.toLocaleString() }}</span>
-                <span class="text-xs text-slate-500 ml-1 mt-2">P</span>
+                <span class="text-xs text-slate-500 ml-1 mt-2">VND</span>
               </div>
               <div v-if="item.bonus" class="flex mt-1">
                 <span class="text-[10px] px-2 py-0.5 rounded border bg-rose-900/50 text-rose-400 border-rose-500/30 ml-2 animate-pulse">
