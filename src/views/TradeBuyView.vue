@@ -337,7 +337,7 @@ async function handleComplete() {
         title: t.value.common.success,
         message: t.value.trade.paymentConfirmed
       })
-      
+       router.push('/dashboard')
       // Refresh order data
       fetchOrder()
     } else {

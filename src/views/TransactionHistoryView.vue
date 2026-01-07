@@ -241,7 +241,7 @@
             <div class="flex justify-between">
               <span class="text-slate-400">{{ t.history.status }}</span>
               <span :class="`font-bold ${getStatusColor(selectedTransaction.status)}`">
-                {{ getStatusText(selectedTransaction.status) }}
+                <a :href="'trade-buy?id='+selectedTransaction.id">{{ getStatusText(selectedTransaction.status) }}</a> 
               </span>
             </div>
             <div class="flex justify-between">

@@ -361,11 +361,11 @@ async function handleApply() {
   creatingOrder.value = true
   
   try {
-    const response = await post('/trading/buy', {
+    const response = await post('/trading/create-order', {
+      type:'BUY',
       amount: parseFloat(amount.value),
-      memo: memo.value.trim(),
-      currency: 'TWD',
-      itemId:'1'
+      remark: memo.value.trim(),
+      currency: 'VND',
     })
     
     if (response.data.success) {

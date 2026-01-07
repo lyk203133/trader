@@ -402,13 +402,14 @@ async function submitWithdraw() {
   try {
     const withdrawData = {
       amount: parseFloat(amount.value),
-      itemId:2,
+      type:'SELL',
+      remark:'會員提現點數',
       fee: calculateFee(),
       receive_amount: calculateReceiveAmount(),
       payment_account_id: paymentAccounts.value.length ? selectedAccountId.value : null
     }
     
-    const response = await post('/trading/sell', withdrawData)
+    const response = await post('/trading/create-order', withdrawData)
     
     if (response.data.success) {
       showToast({
