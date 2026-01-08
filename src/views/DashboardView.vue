@@ -551,12 +551,25 @@ function closePasswordModal() {
 }
 
 async function confirmSellWithPassword() {
-  if (!password.value.trim() || password.value != '123456') {
+  if (!password.value.trim()) {
     showToast({
       type: 'error',
       title: '交易提示',
       message: '交易密碼錯誤'
     })
+    return
+  }
+
+  try{
+  const response = await post('/user/check-trade-password', {
+      password: password.value.trim() 
+    })
+  }catch(ex){
+    showToast({
+        type: 'error',
+        title: t.value.dashboard.checkTradePassword || '交易提醒',
+        message: ex.response.data.message
+      })
     return
   }
   
