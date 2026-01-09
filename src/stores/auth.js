@@ -26,6 +26,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   // 设置自动刷新定时器
   function setupTokenRefresh() {
+    
     clearRefreshTimer()
     
     if (!token.value || !refreshToken.value) return
@@ -33,13 +34,13 @@ export const useAuthStore = defineStore('auth', () => {
     const expirationTime = getTokenExpiration(token.value)
     if (!expirationTime) return
     
-    // 在 token 过期前 5 分钟刷新
-    const refreshTime = expirationTime - 5 * 60 * 1000 - Date.now()
+    // 在 token 过期前 1 分钟刷新
+    const refreshTime = expirationTime -  60 * 1000 - Date.now()
     
     if (refreshTime > 0) {
       refreshTimer.value = setTimeout(async () => {
         await refreshAuthToken()
-      }, refreshTime)
+      }, 60000)
     }
   }
 
@@ -57,7 +58,7 @@ export const useAuthStore = defineStore('auth', () => {
       logout()
       return false
     }
-
+    
     try {
       const response = await api.post('/auth/refresh', {
         refresh_token: refreshToken.value
@@ -68,6 +69,7 @@ export const useAuthStore = defineStore('auth', () => {
       })
       
       if (response.data.success) {
+       
         const { token: newToken, refresh_token: newRefreshToken, user: userData } = response.data.data
         
         // 更新 token
@@ -87,12 +89,12 @@ export const useAuthStore = defineStore('auth', () => {
         return true
       } else {
         error.value = response.data.message || 'Token 刷新失败'
-        logout()
+        //logout()
         return false
       }
     } catch (err) {
       error.value = err.response?.data?.message || err.message || '刷新 token 失败'
-      logout()
+      //logout()
       return false
     }
   }
