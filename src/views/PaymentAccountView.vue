@@ -103,12 +103,31 @@
 
         <!-- Edit Form -->
         <div v-if="isEditing" class="animate-in fade-in slide-in-from-bottom duration-300 space-y-4">
-          <InputField 
+          <div>
+            <label class="text-xs text-slate-400 mb-1 block">{{ t.account.bankName }}</label>
+            <select 
+              v-model="formData.bank_name"
+              class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-sm text-white"
+            >
+              <option value="VIB">VIB</option>
+              <option value="PG BANK">PG BANK</option>
+              <option value="VTB">VTB</option>
+              <option value="MB">MB</option>
+              <option value="VCB">VCB</option>
+              <option value="MSB">MSB</option>
+              <option value="ACB">ACB</option>
+              <option value="SEA">SEA</option>
+              <option value="EIB">EIB</option>
+              <option value="OCB">OCB</option>
+              <option value="VIKKI ">VIKKI</option>
+            </select>
+          </div>
+          <!--InputField 
             :icon="Building2" 
             :placeholder="t.account.bankName" 
             v-model="formData.bank_name"
             required
-          />
+          /-->
           
           <InputField 
             :icon="User" 
